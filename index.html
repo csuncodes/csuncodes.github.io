@@ -50,6 +50,78 @@
 					<div id="main">
 						<div class="inner">
 							<header>
+								<input type="button" value="SPEAK">
+								<script>
+								var btn = document.querySelector('input');
+								var txt = document.querySelector('p');
+
+								btn.addEventListener('click', updateBtn);
+
+								function updateBtn() {
+								  if (btn.value === 'SPEAK') {
+								    btn.value = 'STOP';
+								  } else {
+								    btn.value = 'SPEAK';
+								  }
+								}
+								var recognition = new webkitSpeechRecognition();
+  							recognition.continuous = true;
+  							recognition.interimResults = true;
+								recognition.onresult = function(event) {
+						    var interim_transcript = '';
+						    for (var i = event.resultIndex; i < event.results.length; ++i) {
+						      if (event.results[i].isFinal) {
+						        final_transcript += event.results[i][0].transcript;
+						      } else {
+						        interim_transcript += event.results[i][0].transcript;
+						      }
+						    }
+						    final_transcript = capitalize(final_transcript);
+						    final_span.innerHTML = linebreak(final_transcript);
+						    interim_span.innerHTML = linebreak(interim_transcript);
+						    if (final_transcript || interim_transcript) {
+						      showButtons('inline-block');
+						    }
+						  };
+						function startButton(event) {
+						  if (recognizing) {
+						    recognition.stop();
+						    return;
+						  }
+						  final_transcript = '';
+						  recognition.lang = select_dialect.value;
+						  recognition.start();
+						  ignore_onend = false;
+						  final_span.innerHTML = '';
+						  interim_span.innerHTML = '';
+						  start_img.src = 'mic-slash.gif';
+						  showInfo('info_allow');
+						  showButtons('none');
+						  start_timestamp = event.timeStamp;
+						}
+						recognition.onresult = function(event) {
+							var interim_transcript = '';
+
+							for (var i = event.resultIndex; i < event.results.length; ++i) {
+								if (event.results[i].isFinal) {
+									final_transcript += event.results[i][0].transcript;
+								} else {
+									interim_transcript += event.results[i][0].transcript;
+								}
+							}
+							final_transcript = capitalize(final_transcript);
+							final_span.innerHTML = linebreak(final_transcript);
+							interim_span.innerHTML = linebreak(interim_transcript);
+						};
+						
+
+
+
+							</script>
+							<br>
+							<br>
+							<br>
+							<br>
 								<h1>CLAIRE SUN // SOFTWARE DEVELOPER</h1>
 								<p>Senior at Brandeis University majoring in Neuroscience and Computer Science. <br>
 									Currently working at Involution Studios as a software developer who creates VUIs.<br>
@@ -111,7 +183,7 @@
 										<img src="images/pic02.jpg" alt="" />
 									</span>
 									<a href="https://github.com/csuncodes/csuncodes.github.io">
-										<h2>Portfolio</h2>
+										<h2>Portfolio Site</h2>
 										<div class="content">
 											<p>Click here for the Github Repository for this site!</p>
 										</div>
